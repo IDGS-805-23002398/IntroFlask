@@ -1,0 +1,41 @@
+// Reutilizar elementos html
+{% macro datos(name,placeholder,type="text") %}
+
+<div class="mb-3">
+    <label for="{{name}}" class="form-label">{{ name }}:</label>
+    <input type="{{type}}" name="{{name}}" id="{{name}}" placeholder="{{placeholder}}"
+        class="form-control bg-light text-dark opacity-75">
+</div>
+
+{% endmacro %}
+
+{% macro inputsNum(name, placeholder, atributes, type="number", value=0) %}
+<div class="mb-3">
+    <label for="{{name}}" class="form-label">{{ name }}:</label>
+    <input type="{{type}}" name="{{name}}" id="{{name}}" placeholder="{{placeholder}}"
+        class="form-control bg-light text-dark opacity-75" value="{{value}}" {{atributes}} min="1">
+</div>
+{% endmacro %}
+
+
+{% macro radios(name,id, label, value, isChecked) %}
+<div class="mb-3">
+    <label for="{{name}}">{{label}}
+        <input type="radio" id="{{id}}" name="{{name}}" value="{{value}}" checked="{{isChecked}}">
+    </label>
+</div>
+{% endmacro %}
+
+
+{% macro campoNuevo(field) %}
+<td>{{field.label}}</td>
+<!-- Transforma a HTML -->
+<dd>{{field(**kwargs) | safe }}</dd>
+
+{% if field.errors %}
+    {% for error in field.errors %}
+           <li style="color: red; font-size: x-small;padding: 3px;">{{error}}</li>
+    {% endfor %}
+{% endif %}
+
+{% endmacro %}

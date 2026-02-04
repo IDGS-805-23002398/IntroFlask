@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cinépolis</title>
+  <link href="/static/css/bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+    }
+
+    .cine-bg {
+      background: url('/static/img/cinepolis.png') center/cover no-repeat;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .panel {
+      border: 3px solid white;
+      padding: 15px;
+      color: white;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .panel-title {
+      position: relative;
+      top: -25px;
+      background: #0b3b8c;
+      display: inline-block;
+      padding: 0 10px;
+      font-weight: bold;
+    }
+
+    label {
+      font-size: 0.9rem;
+    }
+
+    .logo-text {
+      font-size: 3rem;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .subtitle {
+      text-align: center;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+
+<body>
+{% import "_macros.html" as macros %}
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success">
+            {{message}}
+          </div>
+        {% endfor %}
+      {% endif%}
+    {% endwith %}
+    {% block content %}
+    {% endblock %}
+
+<article class="cine-bg d-flex flex-column justify-content-center">
+
+  <div class="container-fluid px-5">
+    <form action="/cinepolis" method="post" novalidate>
+   {{form.csrf_token}}
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+    <div class="row align-items-start">
+      <!-- ENTRADAS -->
+      <div class="col-md-4">
+          <div class="panel">
+            <span class="panel-title">Entradas</span>
+             {{macros.campoNuevo(form.nombre, class="form-control")}}
+             {{macros.campoNuevo(form.compradores, class="form-control")}}
+            <div class="mb-2">
+               {{macros.campoNuevo(form.cineco, class="form-control")}}
+            </div>
+              {{macros.campoNuevo(form.boletos, class="form-control")}}
+          </div>
+      </div>
+
+      <div class="col-md-4 d-flex flex-column justify-content-start">
+        <div class="logo-text text-white">
+          Cinépolis
+        </div>
+        <div class="subtitle text-white">
+          LA CAPITAL DEL CINE
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="panel">
+          <span class="panel-title">Salidas</span>
+          {{macros.inputsNum("Total","Valor a Pagar","readonly","number",Total)}}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row justify-content-center mt-4">
+      <div class="col-md-4 text-center panel">
+        <span class="panel-title">Acciones</span>
+        <div class="d-flex justify-content-around mt-2">
+          <button type="submit" class="btn btn-light">Procesar</button>
+          <button type="button" onclick="window.location.href='/cinepolis'" class="btn btn-light">Salir</button>
+        </div>
+      </div>
+    </div>
+    </form>
+  </div>
+</article>
+
+<script src="/static/css/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
