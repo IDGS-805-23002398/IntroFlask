@@ -3,48 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <title>Cinépolis</title>
+
+  <!-- Bootstrap -->
   <link href="/static/css/bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
     body {
       margin: 0;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
     }
 
     .cine-bg {
-      background: url('/static/img/cinepolis.png') center/cover no-repeat;
+      background: linear-gradient(
+          rgba(0, 0, 0, 0.55),
+          rgba(0, 0, 0, 0.55)
+        ),
+        url('/static/img/cinepolis.png') center/cover no-repeat;
       height: 100vh;
       width: 100vw;
     }
 
     .panel {
-      border: 3px solid white;
-      padding: 15px;
-      color: white;
-      background: rgba(0, 0, 0, 0.2);
+      position: relative;
+      border-radius: 12px;
+      padding: 25px 20px 20px;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
     }
 
     .panel-title {
-      position: relative;
-      top: -25px;
+      position: absolute;
+      top: -14px;
+      left: 20px;
       background: #0b3b8c;
-      display: inline-block;
-      padding: 0 10px;
-      font-weight: bold;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 1px;
     }
 
     label {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .form-control {
+      border-radius: 8px;
     }
 
     .logo-text {
-      font-size: 3rem;
-      font-weight: bold;
+      font-size: 3.2rem;
+      font-weight: 800;
       text-align: center;
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+      letter-spacing: 2px;
     }
 
     .subtitle {
       text-align: center;
-      letter-spacing: 2px;
+      letter-spacing: 4px;
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    .btn-light {
+      border-radius: 20px;
+      padding: 6px 20px;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -52,66 +80,73 @@
 <body>
 {% import "_macros.html" as macros %}
 
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-success">
-            {{message}}
-          </div>
-        {% endfor %}
-      {% endif%}
-    {% endwith %}
-    {% block content %}
-    {% endblock %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success text-center m-0">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% block content %}
+{% endblock %}
 
 <article class="cine-bg d-flex flex-column justify-content-center">
-
   <div class="container-fluid px-5">
     <form action="/cinepolis" method="post" novalidate>
-   {{form.csrf_token}}
-    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+      {{ form.csrf_token }}
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-    <div class="row align-items-start">
-      <!-- ENTRADAS -->
-      <div class="col-md-4">
+      <div class="row align-items-start">
+        <!-- ENTRADAS -->
+        <div class="col-md-4 mb-3">
           <div class="panel">
             <span class="panel-title">Entradas</span>
-             {{macros.campoNuevo(form.nombre, class="form-control")}}
-             {{macros.campoNuevo(form.compradores, class="form-control")}}
+            {{ macros.campoNuevo(form.nombre, class="form-control") }}
+            {{ macros.campoNuevo(form.compradores, class="form-control") }}
             <div class="mb-2">
-               {{macros.campoNuevo(form.cineco, class="form-control")}}
+              {{ macros.campoNuevo(form.cineco, class="form-control") }}
             </div>
-              {{macros.campoNuevo(form.boletos, class="form-control")}}
+            {{ macros.campoNuevo(form.boletos, class="form-control") }}
           </div>
-      </div>
-
-      <div class="col-md-4 d-flex flex-column justify-content-start">
-        <div class="logo-text text-white">
-          Cinépolis
         </div>
-        <div class="subtitle text-white">
-          LA CAPITAL DEL CINE
+
+        <!-- LOGO -->
+        <div class="col-md-4 d-flex flex-column justify-content-center mb-3">
+          <div class="logo-text text-white">
+            Cinépolis
+          </div>
+          <div class="subtitle text-white">
+            LA CAPITAL DEL CINE
+          </div>
         </div>
-      </div>
 
-      <div class="col-md-4">
-        <div class="panel">
-          <span class="panel-title">Salidas</span>
-          {{macros.inputsNum("Total","Valor a Pagar","readonly","number",Total)}}
-        </div>
-      </div>
-
-    </div>
-
-    <div class="row justify-content-center mt-4">
-      <div class="col-md-4 text-center panel">
-        <span class="panel-title">Acciones</span>
-        <div class="d-flex justify-content-around mt-2">
-          <button type="submit" class="btn btn-light">Procesar</button>
-          <button type="button" onclick="window.location.href='/cinepolis'" class="btn btn-light">Salir</button>
+        <!-- SALIDAS -->
+        <div class="col-md-4 mb-3">
+          <div class="panel">
+            <span class="panel-title">Salidas</span>
+            {{ macros.inputsNum("Total","Valor a Pagar","readonly","number",Total) }}
+          </div>
         </div>
       </div>
-    </div>
+
+      <!-- ACCIONES -->
+      <div class="row justify-content-center mt-4">
+        <div class="col-md-4 text-center">
+          <div class="panel">
+            <span class="panel-title">Acciones</span>
+            <div class="d-flex justify-content-around mt-3">
+              <button type="submit" class="btn btn-light">Procesar</button>
+              <button type="button" onclick="window.location.href='/cinepolis'" class="btn btn-light">
+                Salir
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </form>
   </div>
 </article>
